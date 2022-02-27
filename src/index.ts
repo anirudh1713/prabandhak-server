@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import errorConverter from './middlewares/error-converter';
 import errorHandler from './utils/error-handler';
 import prisma from './prisma';
 
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
+app.use(errorConverter);
 app.use(errorHandler);
 
 app.listen(PORT, async () => {
