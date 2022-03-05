@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import errorConverter from './middlewares/error-converter';
 import errorHandler from './utils/error-handler';
 import prisma from './prisma';
+import { router } from './routes/v1';
 
 const PORT = process.env.PORT || 3001;
 
@@ -13,6 +14,8 @@ const app = express();
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
+
+app.use('/v1', router);
 
 app.use(errorConverter);
 app.use(errorHandler);
