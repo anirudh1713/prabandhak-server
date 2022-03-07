@@ -7,6 +7,7 @@ export const register = z.object({
     password: z.string(),
   }),
 });
+export type RegisterUserInput = z.infer<typeof register>['body'];
 
 export const login = z.object({
   body: z.object({
@@ -14,3 +15,4 @@ export const login = z.object({
     password: z.string(),
   }),
 });
+export type LoginUserInput = z.infer<typeof login>['body'];

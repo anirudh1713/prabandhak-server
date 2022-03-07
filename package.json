@@ -39,6 +39,7 @@
     "@types/lodash": "^4.14.179",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
+    "date-fns": "^2.28.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "helmet": "^5.0.1",
