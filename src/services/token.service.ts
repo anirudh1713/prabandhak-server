@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { add, getUnixTime } from 'date-fns';
-import { TOKEN_TYPES } from '../config/tokens';
+import { TokenPayload, TOKEN_TYPES } from '../config/tokens';
 import { config } from '../config/config';
 
 export const generateToken = (
@@ -9,7 +9,7 @@ export const generateToken = (
   type: TOKEN_TYPES,
   secret: string,
 ) => {
-  const payload = {
+  const payload: TokenPayload = {
     sub: userId,
     expires: getUnixTime(expires),
     type,
