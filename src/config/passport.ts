@@ -2,7 +2,7 @@
 import {
   Strategy, StrategyOptions, ExtractJwt, VerifyCallback,
 } from 'passport-jwt';
-import prisma from 'prisma';
+import prisma from '../prisma';
 import { config } from './config';
 import { TokenPayload, TOKEN_TYPES } from './tokens';
 
