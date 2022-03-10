@@ -1,3 +1,5 @@
+import { User } from '@prisma/client';
+
 export const wrapWithData = (data: Record<string | number, any>) => {
   return {
     data: {
@@ -5,3 +7,7 @@ export const wrapWithData = (data: Record<string | number, any>) => {
     },
   };
 };
+
+export interface ResponseLocals {
+  user: User;
+}
