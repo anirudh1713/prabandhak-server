@@ -16,3 +16,10 @@ export const login = z.object({
   }),
 });
 export type LoginUserInput = z.infer<typeof login>['body'];
+
+export const refresh = z.object({
+  body: z.object({
+    refreshToken: z.string(),
+  }),
+});
+export type RefreshTokenInput = z.infer<typeof refresh>['body'];
