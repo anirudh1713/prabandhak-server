@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
-    "start": "tsc && ./dist/src/index.js",
+    "start": "node ./build/index.js",
     "build": "tsc",
     "prepare": "husky install",
     "lint": "eslint src --fix --ext .ts"
