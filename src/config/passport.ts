@@ -1,6 +1,6 @@
 /* eslint-disable consistent-return */
 import {
-  Strategy, StrategyOptions, ExtractJwt, VerifyCallback,
+  Strategy, StrategyOptions, VerifyCallback,
 } from 'passport-jwt';
 import prisma from '../prisma';
 import { config } from './config';
@@ -8,7 +8,11 @@ import { TokenPayload, TOKEN_TYPES } from './tokens';
 
 const options: StrategyOptions = {
   secretOrKey: config.accessTokenSecret,
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  jwtFromRequest: (req) => {
+    const token = req.cookies[TOKEN_TYPES.ACCESS];
+
+    return token || null;
+  },
 };
 
 const jwtVerify: VerifyCallback = async (payload: TokenPayload, done) => {

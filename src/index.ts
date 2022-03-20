@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
 import errorConverter from './middlewares/error-converter';
 import errorHandler from './utils/error-handler';
 import { router } from './routes/v1';
@@ -12,9 +13,10 @@ const PORT = process.env.PORT || 3001;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(helmet());
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);

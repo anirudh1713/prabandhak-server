@@ -2,7 +2,11 @@ import { Request } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import asyncHandler from '../utils/async-handler';
-import { RegisterUserInput, LoginUserInput, RefreshTokenInput } from '../validations/auth.validation';
+import {
+  RegisterUserInput,
+  LoginUserInput,
+  RefreshTokenInput,
+} from '../validations/auth.validation';
 import { tokenService, userService } from '../services';
 import { wrapWithData } from '../utils';
 import { TokenPayload } from '../config/tokens';
@@ -14,7 +18,10 @@ export const registerUser = asyncHandler(
   async (req: Request<{}, {}, RegisterUserInput>, res) => {
     const user = await userService.createUser(req.body);
 
-    return res.status(201).send(wrapWithData({ user }));
+    const tokens = await tokenService.generateAuthTokens(user.id);
+
+    tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
+    return res.status(201).send(wrapWithData({ user, tokens }));
   },
 );
 
@@ -25,13 +32,17 @@ export const loginUser = asyncHandler(
       return res.status(400).send({ message: 'Invalid credentials.' });
     }
 
-    const isValidPassword = await bcrypt.compare(req.body.password, user.password);
+    const isValidPassword = await bcrypt.compare(
+      req.body.password,
+      user.password,
+    );
     if (!isValidPassword) {
       return res.status(400).send({ message: 'Invalid credentials.' });
     }
 
     const tokens = await tokenService.generateAuthTokens(user.id);
 
+    tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
     return res.status(200).send(wrapWithData({ tokens }));
   },
 );

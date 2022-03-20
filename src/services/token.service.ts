@@ -1,7 +1,26 @@
 import jwt from 'jsonwebtoken';
 import { add, getUnixTime } from 'date-fns';
+import { CookieOptions, Response } from 'express';
 import { TokenPayload, TOKEN_TYPES } from '../config/tokens';
 import { config } from '../config/config';
+
+const defaultCookieOptions: CookieOptions = {
+  httpOnly: true,
+  sameSite: config.isProduction,
+  secure: config.isProduction,
+  domain: config.baseDomain,
+  path: '/',
+};
+
+const accessTokenCokkieOptions: CookieOptions = {
+  ...defaultCookieOptions,
+  maxAge: config.accessTokenLifetimeInMinutes * 60 * 1000,
+};
+
+const refreshTokenCokkieOptions: CookieOptions = {
+  ...defaultCookieOptions,
+  maxAge: config.refreshTokenLifetimeInDays * 24 * 60 * 60 * 1000,
+};
 
 export const generateToken = (
   userId: number,
@@ -48,4 +67,14 @@ export const generateAuthTokens = (userId: number) => {
       expires: refreshTokenExpires,
     },
   };
+};
+
+export const setTokens = (res: Response, access: string, refresh?: string) => {
+  res.cookie(TOKEN_TYPES.ACCESS, access, accessTokenCokkieOptions);
+  if (refresh) res.cookie(TOKEN_TYPES.REFRESH, refresh, refreshTokenCokkieOptions);
+};
+
+export const clearTokens = (res: Response) => {
+  res.cookie(TOKEN_TYPES.ACCESS, '', { ...accessTokenCokkieOptions, maxAge: 0 });
+  res.cookie(TOKEN_TYPES.REFRESH, '', { ...refreshTokenCokkieOptions, maxAge: 0 });
 };
