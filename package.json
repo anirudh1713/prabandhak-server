@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev ./src/index.ts",
-    "start": "node ./build/index.js",
+    "start": "yarn run migrate && node ./build/index.js",
     "build": "tsc",
+    "migrate": "yarn prisma migrate deploy",
     "prepare": "husky install",
     "lint": "eslint src --fix --ext .ts"
   },
