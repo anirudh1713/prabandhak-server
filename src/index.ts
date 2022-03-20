@@ -9,6 +9,7 @@ import errorHandler from './utils/error-handler';
 import { router } from './routes/v1';
 import { jwtStrategy } from './config/passport';
 import { config } from './config/config';
+import ApiError from './utils/ApiError';
 
 const PORT = process.env.PORT || 3001;
 
@@ -28,6 +29,12 @@ passport.use('jwt', jwtStrategy);
 
 app.use('/v1', router);
 
+// Handle 404 for unknown endpoint.
+app.use((req, res, next) => {
+  next(new ApiError(404, 'Not found'));
+});
+
+// Convert and handle API error.
 app.use(errorConverter);
 app.use(errorHandler);
 
