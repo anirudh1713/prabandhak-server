@@ -7,7 +7,7 @@ export const register = z.object({
     password: z.string(),
   }),
 });
-export type RegisterUserInput = z.infer<typeof register>['body'];
+export type TRegisterUserInput = z.infer<typeof register>['body'];
 
 export const login = z.object({
   body: z.object({
@@ -15,11 +15,11 @@ export const login = z.object({
     password: z.string(),
   }),
 });
-export type LoginUserInput = z.infer<typeof login>['body'];
+export type TLoginUserInput = z.infer<typeof login>['body'];
 
 export const refresh = z.object({
   body: z.object({
     refreshToken: z.string(),
   }),
 });
-export type RefreshTokenInput = z.infer<typeof refresh>['body'];
+export type TRefreshTokenInput = z.infer<typeof refresh>['body'];
