@@ -8,7 +8,5 @@ export const authRouter = express.Router();
 
 authRouter.post('/register', validate(authValidations.register), authController.registerUser);
 authRouter.post('/login', validate(authValidations.login), authController.loginUser);
-authRouter.post('/refresh', validate(authValidations.refresh), authController.refreshToken);
-authRouter.get('/test', auth(), (req, res) => {
-  res.send('OK');
-});
+authRouter.get('/refresh', authController.refreshToken);
+authRouter.get('/me', auth(), authController.getMe);

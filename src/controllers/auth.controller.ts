@@ -1,14 +1,14 @@
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { User } from '@prisma/client';
 import asyncHandler from '../utils/async-handler';
 import {
   TRegisterUserInput,
   TLoginUserInput,
-  TRefreshTokenInput,
 } from '../validations/auth.validation';
 import { tokenService, userService } from '../services';
-import { TokenPayload } from '../config/tokens';
+import { TokenPayload, TOKEN_TYPES } from '../config/tokens';
 import prisma from '../prisma';
 import { config } from '../config/config';
 import ApiError from '../utils/ApiError';
@@ -46,10 +46,10 @@ export const loginUser = asyncHandler(
   },
 );
 
-export const refreshToken = asyncHandler(
-  async (req: Request<{}, {}, TRefreshTokenInput>, res, next) => {
+export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+  try {
     const payload = jwt.verify(
-      req.body.refreshToken,
+      req.cookies[TOKEN_TYPES.REFRESH],
       config.refreshTokenSecret,
     ) as unknown as TokenPayload;
 
@@ -64,6 +64,22 @@ export const refreshToken = asyncHandler(
     }
 
     const tokens = tokenService.generateAuthTokens(user.id);
-    return res.status(200).send({ tokens });
+
+    tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
+    return res.status(200).send('OK');
+  } catch (error) {
+    tokenService.clearTokens(res);
+    return next(new ApiError(401, 'Please authenticate.'));
+  }
+};
+
+export const getMe = asyncHandler(
+  async (req, res: Response<{ user: User }, { user: User }>, next) => {
+    const user = await userService.getUserById(res.locals.user.id);
+    if (!user) {
+      return next(new ApiError(404, 'User not found.'));
+    }
+
+    return res.status(200).send({ user });
   },
 );

@@ -12,12 +12,12 @@ const defaultCookieOptions: CookieOptions = {
   path: '/',
 };
 
-const accessTokenCokkieOptions: CookieOptions = {
+const accessTokenCookieOptions: CookieOptions = {
   ...defaultCookieOptions,
   maxAge: config.accessTokenLifetimeInMinutes * 60 * 1000,
 };
 
-const refreshTokenCokkieOptions: CookieOptions = {
+const refreshTokenCookieOptions: CookieOptions = {
   ...defaultCookieOptions,
   maxAge: config.refreshTokenLifetimeInDays * 24 * 60 * 60 * 1000,
 };
@@ -70,11 +70,11 @@ export const generateAuthTokens = (userId: number) => {
 };
 
 export const setTokens = (res: Response, access: string, refresh?: string) => {
-  res.cookie(TOKEN_TYPES.ACCESS, access, accessTokenCokkieOptions);
-  if (refresh) res.cookie(TOKEN_TYPES.REFRESH, refresh, refreshTokenCokkieOptions);
+  res.cookie(TOKEN_TYPES.ACCESS, access, accessTokenCookieOptions);
+  if (refresh) res.cookie(TOKEN_TYPES.REFRESH, refresh, refreshTokenCookieOptions);
 };
 
 export const clearTokens = (res: Response) => {
-  res.cookie(TOKEN_TYPES.ACCESS, '', { ...accessTokenCokkieOptions, maxAge: 0 });
-  res.cookie(TOKEN_TYPES.REFRESH, '', { ...refreshTokenCokkieOptions, maxAge: 0 });
+  res.cookie(TOKEN_TYPES.ACCESS, '', { ...accessTokenCookieOptions, maxAge: 0 });
+  res.cookie(TOKEN_TYPES.REFRESH, '', { ...refreshTokenCookieOptions, maxAge: 0 });
 };
