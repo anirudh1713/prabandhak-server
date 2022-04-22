@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import {User} from '@prisma/client';
 
 /**
  * Schema is for select property of prisma.

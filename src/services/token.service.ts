@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { add, getUnixTime } from 'date-fns';
-import { CookieOptions, Response } from 'express';
-import { TokenPayload, TOKEN_TYPES } from '../config/tokens';
-import { config } from '../config/config';
+import {add, getUnixTime} from 'date-fns';
+import {CookieOptions, Response} from 'express';
+import {TokenPayload, TOKEN_TYPES} from '../config/tokens';
+import {config} from '../config/config';
 
 const defaultCookieOptions: CookieOptions = {
   httpOnly: true,
@@ -41,7 +41,9 @@ export const generateToken = (
 };
 
 export const generateAuthTokens = (userId: number) => {
-  const accessTokenExpires = add(new Date(), { minutes: config.accessTokenLifetimeInMinutes });
+  const accessTokenExpires = add(new Date(), {
+    minutes: config.accessTokenLifetimeInMinutes,
+  });
   const accessToken = generateToken(
     userId,
     accessTokenExpires,
@@ -49,7 +51,9 @@ export const generateAuthTokens = (userId: number) => {
     config.accessTokenSecret,
   );
 
-  const refreshTokenExpires = add(new Date(), { days: config.refreshTokenLifetimeInDays });
+  const refreshTokenExpires = add(new Date(), {
+    days: config.refreshTokenLifetimeInDays,
+  });
   const refreshToken = generateToken(
     userId,
     refreshTokenExpires,
@@ -71,10 +75,14 @@ export const generateAuthTokens = (userId: number) => {
 
 export const setTokens = (res: Response, access: string, refresh?: string) => {
   res.cookie(TOKEN_TYPES.ACCESS, access, accessTokenCookieOptions);
-  if (refresh) res.cookie(TOKEN_TYPES.REFRESH, refresh, refreshTokenCookieOptions);
+  if (refresh)
+    res.cookie(TOKEN_TYPES.REFRESH, refresh, refreshTokenCookieOptions);
 };
 
 export const clearTokens = (res: Response) => {
-  res.cookie(TOKEN_TYPES.ACCESS, '', { ...accessTokenCookieOptions, maxAge: 0 });
-  res.cookie(TOKEN_TYPES.REFRESH, '', { ...refreshTokenCookieOptions, maxAge: 0 });
+  res.cookie(TOKEN_TYPES.ACCESS, '', {...accessTokenCookieOptions, maxAge: 0});
+  res.cookie(TOKEN_TYPES.REFRESH, '', {
+    ...refreshTokenCookieOptions,
+    maxAge: 0,
+  });
 };

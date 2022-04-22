@@ -1,16 +1,16 @@
-import { NextFunction, Request, Response } from 'express';
+import {NextFunction, Request, Response} from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '@prisma/client';
+import {User} from '@prisma/client';
 import asyncHandler from '../utils/async-handler';
 import {
   TRegisterUserInput,
   TLoginUserInput,
 } from '../validations/auth.validation';
-import { tokenService, userService } from '../services';
-import { TokenPayload, TOKEN_TYPES } from '../config/tokens';
+import {tokenService, userService} from '../services';
+import {TokenPayload, TOKEN_TYPES} from '../config/tokens';
 import prisma from '../prisma';
-import { config } from '../config/config';
+import {config} from '../config/config';
 import ApiError from '../utils/ApiError';
 
 export const registerUser = asyncHandler(
@@ -20,7 +20,7 @@ export const registerUser = asyncHandler(
     const tokens = await tokenService.generateAuthTokens(user.id);
 
     tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
-    return res.status(201).send({ user, tokens });
+    return res.status(201).send({user, tokens});
   },
 );
 
@@ -42,11 +42,15 @@ export const loginUser = asyncHandler(
     const tokens = await tokenService.generateAuthTokens(user.id);
 
     tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
-    return res.status(200).send({ tokens, user });
+    return res.status(200).send({tokens, user});
   },
 );
 
-export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
+export const refreshToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const payload = jwt.verify(
       req.cookies[TOKEN_TYPES.REFRESH],
@@ -74,12 +78,12 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const getMe = asyncHandler(
-  async (req, res: Response<{ user: User }, { user: User }>, next) => {
+  async (req, res: Response<{user: User}, {user: User}>, next) => {
     const user = await userService.getUserById(res.locals.user.id);
     if (!user) {
       return next(new ApiError(404, 'User not found.'));
     }
 
-    return res.status(200).send({ user });
+    return res.status(200).send({user});
   },
 );

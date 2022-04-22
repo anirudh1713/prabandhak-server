@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import {User} from '@prisma/client';
 
 export const wrapWithData = (data: Record<string | number, any>) => {
   return {

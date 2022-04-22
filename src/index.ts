@@ -6,9 +6,9 @@ import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import errorConverter from './middlewares/error-converter';
 import errorHandler from './utils/error-handler';
-import { router } from './routes/v1';
-import { jwtStrategy } from './config/passport';
-import { config } from './config/config';
+import {router} from './routes/v1';
+import {jwtStrategy} from './config/passport';
+import {config} from './config/config';
 import ApiError from './utils/ApiError';
 
 const PORT = process.env.PORT || 3001;
@@ -18,9 +18,9 @@ const app = express();
 app.use(helmet());
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 
-app.use(cors({ credentials: true, origin: config.clientUrl }));
+app.use(cors({credentials: true, origin: config.clientUrl}));
 
 app.use(cookieParser());
 

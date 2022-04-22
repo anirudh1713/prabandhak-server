@@ -1,5 +1,5 @@
 import express from 'express';
-import { authRouter } from './auth.route';
+import {authRouter} from './auth.route';
 
 export const router = express.Router();
 
@@ -10,6 +10,6 @@ const routes = [
   },
 ];
 
-routes.forEach((route) => {
+routes.forEach(route => {
   router.use(route.path, route.rotue);
 });

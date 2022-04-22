@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
 export const register = z.object({
   body: z.object({
