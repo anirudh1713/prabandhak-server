@@ -70,7 +70,7 @@ export const refreshToken = async (
     const tokens = tokenService.generateAuthTokens(user.id);
 
     tokenService.setTokens(res, tokens.access.token, tokens.refresh.token);
-    return res.status(200).send('OK');
+    return res.status(200).send({tokens});
   } catch (error) {
     tokenService.clearTokens(res);
     return next(new ApiError(401, 'Please authenticate.'));
