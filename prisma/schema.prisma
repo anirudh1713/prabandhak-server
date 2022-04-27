@@ -11,8 +11,24 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  name     String
-  password String
+  id         Int                 @id @default(autoincrement())
+  email      String              @unique
+  name       String
+  password   String
+  workspaces UsersInWorkspaces[]
+}
+
+model Workspace {
+  id    Int                 @id @default(autoincrement())
+  name  String
+  users UsersInWorkspaces[]
+}
+
+model UsersInWorkspaces {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId Int
+
+  @@id([userId, workspaceId])
 }
