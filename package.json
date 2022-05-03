@@ -8,6 +8,7 @@
     "start": "yarn run migrate && node ./build/index.js",
     "build": "tsc",
     "migrate": "yarn prisma migrate deploy",
+    "migrate-reset": "prisma migrate reset --force",
     "prepare": "husky install",
     "lint": "eslint src --fix --ext .ts",
     "pretty": "prettier --write ."
